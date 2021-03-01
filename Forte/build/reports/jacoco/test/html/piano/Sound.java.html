@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Sound.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Forte</a> &gt; <a href="index.source.html" class="el_package">piano</a> &gt; <span class="el_source">Sound.java</span></div><h1>Sound.java</h1><pre class="source lang-java linenums">package piano;
+import javax.sound.midi.*;
+
+public class Sound {
+    private int noteNumber;
+    private Synthesizer synthesizer;
+    private MidiChannel channel;
+    private int velocity;
+    private int instrumentNo;
+    
+<span class="fc" id="L11">    public Sound(int noteNumber){</span>
+<span class="fc" id="L12">        this.noteNumber = noteNumber;</span>
+<span class="fc" id="L13">        this.velocity = 100;</span>
+<span class="fc" id="L14">        this.instrumentNo = 0; // default</span>
+<span class="fc" id="L15">    }</span>
+
+    public void play() throws MidiUnavailableException {
+<span class="fc" id="L18">        this.synthesizer = MidiSystem.getSynthesizer();</span>
+<span class="fc" id="L19">        this.synthesizer.open();</span>
+<span class="fc" id="L20">        this.channel = this.synthesizer.getChannels()[0];</span>
+<span class="fc" id="L21">        this.channel.allNotesOff();</span>
+<span class="fc" id="L22">        Instrument currentInstrument = synthesizer.getAvailableInstruments()[this.instrumentNo];</span>
+<span class="fc" id="L23">        this.synthesizer.loadInstrument(currentInstrument);</span>
+<span class="fc" id="L24">        this.channel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());</span>
+<span class="fc" id="L25">        this.channel.noteOn(this.noteNumber, this.velocity);</span>
+        
+        // System.out.println(synthesizer.getAvailableInstruments().);
+<span class="fc" id="L28">    }</span>
+
+    public void changeInstrument(String name) { 
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if(name ==  &quot;Acoustic Grand Piano&quot;) {</span>
+<span class="fc" id="L32">            this.instrumentNo = 0;</span>
+        }
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if(name == &quot;Marimba&quot;) {</span>
+<span class="fc" id="L35">            this.instrumentNo = 12;</span>
+        }
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if(name == &quot;Banjo&quot;) {</span>
+<span class="fc" id="L38">            this.instrumentNo = 105;</span>
+        }
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if(name == &quot;Alto Saxophone&quot;) {</span>
+<span class="fc" id="L41">            this.instrumentNo = 65;</span>
+        }
+
+<span class="fc" id="L44">    }</span>
+
+    public MidiChannel getChannel() {
+<span class="nc" id="L47">        return this.channel;</span>
+    }
+
+    public int getNote() {
+<span class="fc" id="L51">        return this.noteNumber;</span>
+    }
+
+    // for testing only
+    public int getInstrumentNo() {
+<span class="fc" id="L56">        return this.instrumentNo;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

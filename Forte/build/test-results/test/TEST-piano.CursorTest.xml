@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="piano.CursorTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2020-05-30T12:55:38" hostname="192-168-1-106.tpgi.com.au" time="0.004">
+  <properties/>
+  <testcase name="logicTest" classname="piano.CursorTest" time="0.002"/>
+  <testcase name="moveTest" classname="piano.CursorTest" time="0.0"/>
+  <testcase name="getTest" classname="piano.CursorTest" time="0.0"/>
+  <testcase name="resetTest" classname="piano.CursorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Button.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Forte</a> &gt; <a href="index.source.html" class="el_package">piano</a> &gt; <span class="el_source">Button.java</span></div><h1>Button.java</h1><pre class="source lang-java linenums">package piano;
+
+import processing.core.PImage;
+import processing.core.PApplet;
+
+public class Button {
+    private int x;
+    private int y;
+    private PImage[] buttonImages;
+    private PImage currButton;
+    
+<span class="fc" id="L12">    public Button(int x, int y, PImage[] buttonImages) {</span>
+<span class="fc" id="L13">        this.x = x;</span>
+<span class="fc" id="L14">        this.y = y;</span>
+<span class="fc" id="L15">        this.buttonImages = buttonImages;</span>
+<span class="fc" id="L16">        this.currButton = buttonImages[0]; // default showing play button</span>
+<span class="fc" id="L17">    }</span>
+
+    public void draw(PApplet app) {
+        // Handling graphics
+<span class="fc" id="L21">        app.image(this.currButton, this.x, this.y);</span>
+<span class="fc" id="L22">    }</span>
+
+    public void update() {
+        try {
+<span class="nc bnc" id="L26" title="All 2 branches missed.">            if(this.currButton.equals(this.buttonImages[0])) {</span>
+<span class="nc" id="L27">                this.currButton = this.buttonImages[1];</span>
+            } else {
+<span class="nc" id="L29">                this.currButton = this.buttonImages[0];</span>
+            }
+<span class="fc" id="L31">        } catch (NullPointerException e) {</span>
+<span class="fc" id="L32">            this.currButton = null;</span>
+<span class="nc" id="L33">        }</span>
+<span class="fc" id="L34">    }</span>
+
+    public void reset() {
+<span class="fc" id="L37">        this.currButton = this.buttonImages[0];</span>
+<span class="fc" id="L38">    }</span>
+
+    public PImage getCurr() { // for testing only
+<span class="fc" id="L41">        return this.currButton;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Forte</a> &gt; <a href="index.source.html" class="el_package">piano</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package piano;
+
+import javax.sound.midi.*;
+import processing.core.PApplet;
+import processing.core.PImage;
+import processing.event.MouseEvent;
+
+public class App extends PApplet {
+    private PImage banner;
+    private PImage middleBanner;
+    private PImage keyboard;
+    private PImage buttonBack;
+    private PImage grid;
+    private PImage blockImage;
+    private PImage stop;
+    private PImage previous;
+    private PImage next;
+
+    private Cursor cursor;
+    private Execute button;
+    private Block block;
+    private Sound sound;
+    private Clear clear;
+    private Save save;
+    private Load load;
+    private InstrumentButton instrumentButton;
+    private Block temp;
+
+    private Block[] blocksList;
+    private PImage[] buttonImageList;
+    private PImage[] instrumentIcons;
+
+<span class="fc" id="L33">    public App() {</span>
+        // Initialise variables here
+<span class="fc" id="L35">        this.blocksList = new Block[416];</span>
+<span class="fc" id="L36">        this.buttonImageList = new PImage[2]; // play and pause images</span>
+<span class="fc" id="L37">        this.instrumentIcons = new PImage[4]; // instruments</span>
+<span class="fc" id="L38">    }</span>
+
+    public void settings() {
+        // Don't touch
+<span class="fc" id="L42">        size(540, 335);</span>
+<span class="fc" id="L43">    }</span>
+
+    public void setup() {
+<span class="fc" id="L46">        frameRate(60);</span>
+        // Load images here
+<span class="fc" id="L48">        this.banner = this.loadImage(&quot;src/main/resources/banner.png&quot;);</span>
+<span class="fc" id="L49">        this.blockImage = this.loadImage(&quot;src/main/resources/block.png&quot;);</span>
+<span class="fc" id="L50">        this.buttonBack = this.loadImage(&quot;src/main/resources/buttonBack.png&quot;);</span>
+<span class="fc" id="L51">        this.grid = this.loadImage(&quot;src/main/resources/grid.png&quot;);</span>
+<span class="fc" id="L52">        this.keyboard = this.loadImage(&quot;src/main/resources/keyboard.png&quot;);</span>
+<span class="fc" id="L53">        this.middleBanner = this.loadImage(&quot;src/main/resources/middleBanner.png&quot;);</span>
+<span class="fc" id="L54">        this.cursor = new Cursor(48, 59, this.loadImage(&quot;src/main/resources/pointer.png&quot;));</span>
+<span class="fc" id="L55">        this.buttonImageList[0] = this.loadImage(&quot;src/main/resources/play.png&quot;); // play (default)</span>
+<span class="fc" id="L56">        this.buttonImageList[1] = this.loadImage(&quot;src/main/resources/pause.png&quot;); // pause</span>
+<span class="fc" id="L57">        this.button = new Execute(5, 5, buttonImageList);</span>
+<span class="fc" id="L58">        this.stop = this.loadImage(&quot;src/main/resources/stop.png&quot;);</span>
+<span class="fc" id="L59">        this.clear = new Clear(95, 5, this.loadImage(&quot;src/main/resources/reset.png&quot;), blocksList);</span>
+<span class="fc" id="L60">        this.save = new Save(140, 5, this.loadImage(&quot;src/main/resources/save.png&quot;));</span>
+<span class="fc" id="L61">        this.load = new Load(185, 5, this.loadImage(&quot;src/main/resources/load.png&quot;));</span>
+<span class="fc" id="L62">        int i = 0;</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (int x = 61; x &lt; 541; x = x + 15) {</span>
+<span class="fc" id="L64">            int y = 76;</span>
+<span class="fc" id="L65">            int noteNum = 72; // MIDI number, 72 corresponds to the top one which is C5</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            while (y &lt; 336) {</span>
+<span class="fc" id="L67">                this.sound = new Sound(noteNum);</span>
+<span class="fc" id="L68">                this.block = new Block(x, y, blockImage, sound); // stores coordinates, image and sound for the block</span>
+<span class="fc" id="L69">                this.blocksList[i] = this.block;</span>
+<span class="fc" id="L70">                y = y + 20;</span>
+<span class="fc" id="L71">                i++;</span>
+<span class="fc" id="L72">                noteNum--;</span>
+            }
+        }
+<span class="fc" id="L75">        this.previous = this.loadImage(&quot;src/main/resources/prev.png&quot;);</span>
+<span class="fc" id="L76">        this.next = this.loadImage(&quot;src/main/resources/next.png&quot;);</span>
+<span class="fc" id="L77">        this.instrumentIcons[0] = this.loadImage(&quot;src/main/resources/P.png&quot;);</span>
+<span class="fc" id="L78">        this.instrumentIcons[1] = this.loadImage(&quot;src/main/resources/M.png&quot;);</span>
+<span class="fc" id="L79">        this.instrumentIcons[2] = this.loadImage(&quot;src/main/resources/B.png&quot;);</span>
+<span class="fc" id="L80">        this.instrumentIcons[3] = this.loadImage(&quot;src/main/resources/S.png&quot;);</span>
+<span class="fc" id="L81">        this.instrumentButton = new InstrumentButton(320, 5, instrumentIcons);</span>
+
+<span class="fc" id="L83">    }</span>
+
+    public void draw() {
+        // Draw your program here
+<span class="fc" id="L87">        loop();</span>
+<span class="fc" id="L88">        this.cursor.tick();</span>
+<span class="fc" id="L89">        this.image(this.middleBanner, 0, 0);</span>
+<span class="fc" id="L90">        this.image(this.banner, 0, 0);</span>
+<span class="fc" id="L91">        this.image(this.buttonBack, 5, 5);</span>
+<span class="fc" id="L92">        this.button.draw(this); // play and pause</span>
+<span class="fc" id="L93">        this.image(this.buttonBack, 50, 5);</span>
+<span class="fc" id="L94">        this.image(this.stop, 50, 5); // stop</span>
+<span class="fc" id="L95">        this.image(this.buttonBack, 95, 5);</span>
+<span class="fc" id="L96">        this.clear.draw(this); // clear</span>
+<span class="fc" id="L97">        this.image(this.buttonBack, 140, 5);</span>
+<span class="fc" id="L98">        this.save.draw(this); // save</span>
+<span class="fc" id="L99">        this.image(this.buttonBack, 185, 5);</span>
+<span class="fc" id="L100">        this.load.draw(this); // load</span>
+<span class="fc" id="L101">        this.image(this.buttonBack, 275, 5);</span>
+<span class="fc" id="L102">        this.image(this.previous, 275, 5); // previous</span>
+<span class="fc" id="L103">        this.image(this.buttonBack, 320, 5);</span>
+<span class="fc" id="L104">        this.instrumentButton.draw(this); // instruments</span>
+<span class="fc" id="L105">        this.image(this.buttonBack, 365, 5);</span>
+<span class="fc" id="L106">        this.image(this.next, 365, 5); // next</span>
+<span class="fc" id="L107">        this.image(this.keyboard, 0, 75);</span>
+<span class="fc" id="L108">        this.image(this.grid, 60, 75);</span>
+<span class="fc" id="L109">        this.cursor.draw(this);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (Block b : blocksList) {</span>
+<span class="fc" id="L111">            b.draw(this);</span>
+        }
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        for (Block b : blocksList) {</span>
+<span class="pc bpc" id="L114" title="3 of 4 branches missed.">            if (this.cursor.getX() + 12 == b.getX() &amp;&amp; b.isActive()) { </span>
+                try {
+<span class="nc" id="L116">                    b.getSound().play();</span>
+<span class="nc" id="L117">                    this.temp = b;</span>
+<span class="nc" id="L118">                } catch (MidiUnavailableException e) {</span>
+<span class="nc" id="L119">                    e.printStackTrace();</span>
+<span class="nc" id="L120">                }</span>
+            }
+<span class="pc bpc" id="L122" title="3 of 4 branches missed.">            if (this.cursor.getX() + 12 == b.getX() + 15 &amp;&amp; b.isActive()) {</span>
+<span class="nc" id="L123">                this.temp.getSound().getChannel().allNotesOff();</span>
+            }
+        }
+<span class="fc" id="L126">    }</span>
+
+    public void mousePressed(final MouseEvent e) {
+<span class="nc" id="L129">        loop();</span>
+        // get where mouse is clicked
+<span class="nc" id="L131">        final int x = e.getX();</span>
+<span class="nc" id="L132">        final int y = e.getY();</span>
+
+        // buttons are 40 x 40 pixels
+
+<span class="nc bnc" id="L136" title="All 4 branches missed.">        if(y &gt; 5 &amp;&amp; y &lt; 45) {</span>
+            // play and pause (5,5)
+<span class="nc bnc" id="L138" title="All 4 branches missed.">            if (x &gt; 5 &amp;&amp; x &lt; 45) {</span>
+<span class="nc" id="L139">                this.cursor.move();</span>
+<span class="nc" id="L140">                this.button.update();</span>
+            }
+            // stop (50, 5)
+<span class="nc bnc" id="L143" title="All 4 branches missed.">            if (x &gt; 50 &amp;&amp; x &lt; 90) {</span>
+<span class="nc" id="L144">                this.cursor.reset();</span>
+<span class="nc" id="L145">                this.button.reset();</span>
+            }
+            // clear (95, 5)
+<span class="nc bnc" id="L148" title="All 4 branches missed.">            if (x &gt; 95 &amp;&amp; x &lt; 135) {</span>
+<span class="nc" id="L149">                this.clear.clear();</span>
+<span class="nc" id="L150">                redraw();</span>
+            }
+            // save (140, 5)
+<span class="nc bnc" id="L153" title="All 4 branches missed.">            if (x &gt; 140 &amp;&amp; x &lt; 180) {</span>
+<span class="nc" id="L154">                this.save.save(this.blocksList);</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                if(this.cursor.getVelocity() != 0) {</span>
+<span class="nc" id="L156">                    this.cursor.move();</span>
+<span class="nc" id="L157">                    this.button.update();</span>
+                }
+            }
+            // load (185, 5)
+<span class="nc bnc" id="L161" title="All 4 branches missed.">            if (x &gt; 185 &amp;&amp; x &lt; 225) {</span>
+<span class="nc" id="L162">                this.blocksList = this.load.load(this.blocksList);</span>
+<span class="nc" id="L163">                redraw();</span>
+            }
+            // previous (275, 5)
+<span class="nc bnc" id="L166" title="All 4 branches missed.">            if (x &gt; 275 &amp;&amp; x &lt; 315) {</span>
+<span class="nc" id="L167">                this.instrumentButton.previous();</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                for(Block b : blocksList) {</span>
+<span class="nc" id="L169">                    b.getSound().changeInstrument(this.instrumentButton.getName());</span>
+                }
+<span class="nc" id="L171">                redraw();</span>
+            }
+
+<span class="nc bnc" id="L174" title="All 4 branches missed.">            if (x &gt; 365 &amp;&amp; x &lt; 405) {</span>
+<span class="nc" id="L175">                this.instrumentButton.next();</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">                for(Block b : blocksList) {</span>
+<span class="nc" id="L177">                    b.getSound().changeInstrument(this.instrumentButton.getName());</span>
+                }
+<span class="nc" id="L179">                redraw();</span>
+            }
+            
+        }
+
+        // blocks
+<span class="nc bnc" id="L185" title="All 4 branches missed.">        if (x &gt; 60 &amp;&amp; y &gt; 75) {</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">            for (Block b : blocksList) {</span>
+<span class="nc bnc" id="L187" title="All 8 branches missed.">                if (x &gt; b.getX() &amp;&amp; x &lt; b.getX() + 15 &amp;&amp; y &gt; b.getY() &amp;&amp; y &lt; b.getY() + 15) {</span>
+<span class="nc" id="L188">                    b.update();</span>
+<span class="nc" id="L189">                    redraw();</span>
+                }
+            }
+            
+        }
+<span class="nc" id="L194">    }</span>
+
+    public static void main(final String[] args) {
+        // Don't touch this
+<span class="nc" id="L198">        PApplet.main(&quot;piano.App&quot;);</span>
+<span class="nc" id="L199">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
